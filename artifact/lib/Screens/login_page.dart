@@ -27,9 +27,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    return Material(
-      child: SingleChildScrollView(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: height * 1.0 / 18.0),

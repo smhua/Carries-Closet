@@ -2,8 +2,10 @@
 
 # Required imports
 import os
+import traceback
+
 from flask import Flask, request, jsonify
-from firebase_admin import credentials, firestore, initialize_app, auth
+from firebase_admin import credentials, initialize_app, firestore
 from datetime import date
 
 # Initialize Flask app
@@ -16,6 +18,13 @@ db = firestore.client()
 users_ref = db.collection('users')
 requests_ref = db.collection('requests')
 
+error_500 = """<!doctype html>
+<html lang=en>
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an unexpected condition that prevented it from fulfilling the request.
+ The error has been logged.</p>"""
+
 
 @app.route('/users/add', methods=['POST'])
 @app.route('/users/create', methods=['POST'])
@@ -26,12 +35,12 @@ def add_user():
         e.g. form={'id': '1', 'title': 'Write a blog post'}
     """
     try:
-        id = request.form['id']
-        # should include id, username, password, email, and permissions
-        users_ref.document(id).set(request.form)
-        return jsonify({"success": True}), 200
+        # should include username, password, email, and permissions
+        doc_id = users_ref.add(request.form)
+        return jsonify({"success": True, "id": doc_id}), 201
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/users', methods=['GET'])
@@ -52,9 +61,10 @@ def get_user():
             return jsonify(user.to_dict()), 200
         else:
             # all_users = [doc.to_dict() for doc in users_ref.stream()]
-            return jsonify("No user found matching given parameters."), 200
+            return jsonify("No user found matching given parameters."), 404
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/users/update', methods=['PUT', 'PATCH'])
@@ -75,7 +85,8 @@ def update_user():
         users_ref.document(document_id).update(request.form)
         return jsonify({"success": True}), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/users/remove', methods=['DELETE'])
@@ -92,50 +103,49 @@ def delete_user():
             for doc in users_ref.stream():
                 if doc.get('username') == username:
                     document_id = doc.id
+        if document_id is None:
+            return jsonify("No user found matching given parameters."), 404
         users_ref.document(document_id).delete()
         return jsonify({"success": True}), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/hygiene/create', methods=['POST'])
 @app.route('/requests/hygiene/add', methods=['POST'])
 def create_hygiene_request():
     try:
-        # Check for ID in form data
-        document_id = request.form.get('id')
-        # Expect: id, address, age, city, state, gender, item, notes, size, zip
-        if document_id is None:
-            return jsonify("No document ID provided in the form request."), 200
+        # Expect: address, age, city, state, gender, item, notes, size, zip
+        # Might be able to grab age, city, state, etc. from user profile information, so
+        # later change to sending user in request instead of demographic information needing to be resubmitted 24/7
         form_data = request.form.to_dict()
         form_data['date'] = date.today().strftime("%m/%d/%Y")  # MM/DD/YYYY
         form_data['type'] = 'hygiene'
         form_data['status'] = 'submitted'
-        requests_ref.document(document_id).set(form_data)
-        return jsonify({"success": True}), 200
+        doc_id = requests_ref.add(form_data)
+        return jsonify({"success": True, "id": doc_id}), 201
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/clothing/create', methods=['POST'])
 @app.route('/requests/clothing/add', methods=['POST'])
 def create_clothing_request():
     try:
-        # Check for ID in form data
-        document_id = request.form.get('id')
-        # Expect: id, address, age, city, state, gender, item, notes, size, zip
-        # Might be able to grab age, city, state, etc from user profile information, so
+        # Expect: address, age, city, state, gender, item, notes, size, zip
+        # Might be able to grab age, city, state, etc. from user profile information, so
         # later change to sending user in request instead of demographic information needing to be resubmitted 24/7
-        if document_id is None:
-            return jsonify("No document ID provided in the form request."), 200
         form_data = request.form.to_dict()
         form_data['date'] = date.today().strftime("%m/%d/%Y")  # MM/DD/YYYY
         form_data['type'] = 'clothing'
         form_data['status'] = 'submitted'
-        requests_ref.document(document_id).set(form_data)
-        return jsonify({"success": True}), 200
+        doc_id = requests_ref.add(form_data)
+        return jsonify({"success": True, "id": doc_id}), 201
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/clothing', methods=['GET'])
@@ -157,7 +167,8 @@ def list_clothing_requests():
         else:
             return jsonify(requests_ref.document(document_id).get().to_dict()), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/hygiene', methods=['GET'])
@@ -179,7 +190,8 @@ def list_hygiene_requests():
         else:
             return jsonify(requests_ref.document(document_id).get().to_dict()), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests', methods=['GET'])
@@ -194,7 +206,8 @@ def list_all_requests():
         else:
             return jsonify(requests_ref.document(document_id).get().to_dict()), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/remove', methods=['DELETE'])
@@ -206,7 +219,8 @@ def remove_request():
         requests_ref.document(document_id).delete()
         return jsonify({"success": True}), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
 @app.route('/requests/edit', methods=['PUT', 'PATCH'])
@@ -217,10 +231,11 @@ def update_request():
         requests_ref.document(document_id).update(request.form)
         return jsonify({"success": True}), 200
     except Exception as e:
-        return f"An Error Occurred: {e}"
+        print(f"An Error Occurred: {e}")
+        return error_500, 500
 
 
-#Dev server setup
+# Dev server setup
 port = int(os.environ.get('PORT', 8080))
 if __name__ == '__main__':
     app.run(threaded=True, host='0.0.0.0', port=port)
