@@ -38,9 +38,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     child: IconButton(
                       iconSize: width * 1.0 / 18.0,
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                          return LoginPage();
-                        })));
+                        // Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                        //   return LoginPage();
+                        // })));
+                        Navigator.pop(context);
                       },
                       icon: const Icon(Icons.arrow_back)
                     )

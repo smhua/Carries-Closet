@@ -19,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-
     super.dispose();
   }
 
@@ -92,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
               child: TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: AutovalidateMode.always,
                 validator: (password) =>
                   password != null
                   ? 'Please enter a password'
@@ -134,14 +133,6 @@ class _LoginPageState extends State<LoginPage> {
         )
       )
     );
-  }
-
-  bool isPasswordValid(password) {
-    if (password.length < 6) {
-      return false;
-    } else {
-    return true;
-    }
   }
   Future signIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(

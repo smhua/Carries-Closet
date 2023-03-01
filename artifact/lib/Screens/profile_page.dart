@@ -81,7 +81,7 @@ class ProfileFormState extends State<ProfileForm> {
                 if (_formKey.currentState!.validate()) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: ((context) {
-                    return OpenPage();
+                    return const MainPage(isLogin: true);
                   })));
                 }
               },
