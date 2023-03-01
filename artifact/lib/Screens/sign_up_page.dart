@@ -1,5 +1,6 @@
 import 'package:artifact/Screens/open_page.dart';
 import 'package:artifact/Screens/profile_page.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import "package:artifact/main.dart";
@@ -12,8 +13,10 @@ class SignUp_Page extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUp_Page> {
+  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final reEnterController = TextEditingController();
   @override
   void dispose() {
     emailController.dispose();
@@ -62,21 +65,31 @@ class _SignUpPageState extends State<SignUp_Page> {
             SizedBox(height: height * 1.0 / 13.5),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-              child: TextField(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.always,
+                validator: (email) =>
+                  email != null && !EmailValidator.validate(email)
+                    ? 'Please enter a valid email'
+                    : null,
                 controller: emailController,
                 textInputAction: TextInputAction.done,
                 cursorColor: Colors.white,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Username',
-                  hintText: 'Enter your username',
+                  hintText: 'Enter your email',
                 ),
               ),
             ),
             SizedBox(height: height * 1.0 / 18.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-              child: TextField(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.always,
+                validator: (password) =>
+                  password != null && !passwordValidator(password)
+                  ? 'All passwords must be at east 6 characters long'
+                  : null,
                 controller: passwordController,
                 // textInputAction: TextInputAction.done,
                 obscureText: true,
@@ -91,9 +104,13 @@ class _SignUpPageState extends State<SignUp_Page> {
             SizedBox(height: height * 1.0 / 18.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-              child: TextField(
-                controller: passwordController,
-                // textInputAction: TextInputAction.done,
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: reEnterController,
+                validator: (reEnterPassword) =>
+                  reEnterPassword != null && !(reEnterPassword == passwordController.text.trim())
+                    ? 'Passwords do not match'
+                    : null,
                 obscureText: true,
                 obscuringCharacter: '*',
                 decoration: const InputDecoration(
@@ -177,7 +194,13 @@ class _SignUpPageState extends State<SignUp_Page> {
       ),
     );
   }
+  bool passwordValidator(password) {
+    return password.length < 6 ? false : true;
+  }
   Future signUp() async {
+    final isValidForm = formKey.currentState!.validate(); 
+    if (isValidForm) {
+    }
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),

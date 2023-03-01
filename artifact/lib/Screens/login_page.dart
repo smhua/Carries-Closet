@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (email) =>
                   email != null && !EmailValidator.validate(email)
-                      ? 'Enter a valid email'
+                      ? 'Please enter a valid email'
                       : null,
                 controller: emailController,
                 textInputAction: TextInputAction.done,
@@ -94,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (password) =>
-                  password != null && !isPasswordValid(password)
-                  ? 'Passwords must be at least 6 characters long'
+                  password != null
+                  ? 'Please enter a password'
                   : null,
                 controller: passwordController,
                 textInputAction: TextInputAction.done,
