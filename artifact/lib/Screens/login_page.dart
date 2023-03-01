@@ -1,4 +1,5 @@
 import 'package:artifact/Screens/open_page.dart';
+import "package:email_validator/email_validator.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import "package:artifact/main.dart";
@@ -71,7 +72,12 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: height * 1.0 / 9.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-              child: TextField(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (email) =>
+                  email != null && !EmailValidator.validate(email)
+                      ? 'Enter a valid email'
+                      : null,
                 controller: emailController,
                 textInputAction: TextInputAction.done,
                 cursorColor: Colors.white,
@@ -85,7 +91,12 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: height * 1.0 / 18.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-              child: TextField(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (password) =>
+                  password != null && !isPasswordValid(password)
+                  ? 'Passwords must be at least 6 characters long'
+                  : null,
                 controller: passwordController,
                 textInputAction: TextInputAction.done,
                 obscureText: true,
@@ -100,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 40.0),
               child: TextButton(
-                child: Text('Forgot Password?'),
+                child: const Text('Forgot Password?'),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: ((context) {
                       return ForgotPassword();
@@ -125,8 +136,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  bool isPasswordValid(password) {
+    if (password.length < 6) {
+      return false;
+    } else {
+    return true;
+    }
+  }
   Future signIn() async {
-    print("this function is being called");
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
