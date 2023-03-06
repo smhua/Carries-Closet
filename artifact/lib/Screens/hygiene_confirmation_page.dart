@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import "package:artifact/main.dart";
 import 'package:artifact/Screens/hygiene_page.dart';
-import "package:artifact/home_page.dart";
+import 'package:artifact/admin_home_page.dart';
 import "package:artifact/main.dart";
+import 'package:artifact/home_page.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -209,6 +210,12 @@ class _HygieneConfirmationPageState extends State<HygieneConfirmationPage> {
         ? Uri.parse('http://127.0.0.1:8080/requests/hygiene/create')
         : Uri.parse('http://10.0.2.2:8080/requests/hygiene/create');
 
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    if (uid == null || uid == "") {
+      print("failed: no current user");
+      return;
+    }
+
     var response = await http.post(url, body: {
       'gender': widget.gender,
       'age': widget.age,
@@ -216,7 +223,8 @@ class _HygieneConfirmationPageState extends State<HygieneConfirmationPage> {
       'size': widget.size,
       'emergency': widget.emergency,
       'address': widget.address,
-      'notes': widget.notes
+      'notes': widget.notes,
+      'uid': uid
     });
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
