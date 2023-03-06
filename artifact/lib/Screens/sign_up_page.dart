@@ -149,6 +149,7 @@ class _SignUpPageState extends State<SignUp_Page> {
           //   ),
           // ),
 
+
           // const Padding(
           //   padding: EdgeInsets.only(left: 80, top: 100, right: 80, bottom: 30),
           // child: TextButton(
