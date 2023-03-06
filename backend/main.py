@@ -7,6 +7,7 @@ import traceback
 from flask import Flask, request, jsonify
 from firebase_admin import credentials, initialize_app, firestore
 from datetime import date
+import time
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -36,8 +37,12 @@ def add_user():
     """
     try:
         # should include username, password, email, and permissions
-        doc_id = users_ref.add(request.form)
-        return jsonify({"success": True, "id": doc_id[1].id}), 201
+        if request.form.get('id') is None:
+            doc_id = users_ref.add(request.form)
+            return jsonify({"success": True, "id": doc_id[1].id}), 201
+        else:
+            users_ref.document(request.form['id']).set(request.form)
+            return jsonify({"success": True, "id": request.form['id']}), 201
     except Exception as e:
         print(f"An Error Occurred: {e}")
         return error_500, 500
@@ -121,6 +126,7 @@ def create_hygiene_request():
         # later change to sending user in request instead of demographic information needing to be resubmitted 24/7
         form_data = request.form.to_dict()
         form_data['date'] = date.today().strftime("%m/%d/%Y")  # MM/DD/YYYY
+        form_data['timestamp'] = str(time.time())
         form_data['type'] = 'hygiene'
         form_data['status'] = 'submitted'
         doc_id = requests_ref.add(form_data)
@@ -139,6 +145,7 @@ def create_clothing_request():
         # later change to sending user in request instead of demographic information needing to be resubmitted 24/7
         form_data = request.form.to_dict()
         form_data['date'] = date.today().strftime("%m/%d/%Y")  # MM/DD/YYYY
+        form_data['timestamp'] = str(time.time())
         form_data['type'] = 'clothing'
         form_data['status'] = 'submitted'
         doc_id = requests_ref.add(form_data)
@@ -156,6 +163,7 @@ def list_clothing_requests():
         document_id = request.args.get('id')
         if document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             removed_documents = []
             for i in range(len(all_requests)):
                 request_document = all_requests[i]
@@ -179,6 +187,7 @@ def list_hygiene_requests():
         document_id = request.args.get('id')
         if document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             removed_documents = []
             for i in range(len(all_requests)):
                 request_document = all_requests[i]
@@ -202,6 +211,7 @@ def list_all_requests():
         document_id = request.args.get('id')
         if document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             return jsonify(all_requests), 200
         else:
             return jsonify(requests_ref.document(document_id).get().to_dict()), 200

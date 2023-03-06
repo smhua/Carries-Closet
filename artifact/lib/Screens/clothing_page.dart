@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import "package:artifact/main.dart";
 import 'package:artifact/Screens/clothing_confirmation_page.dart';
-import "package:artifact/home_page.dart";
+import 'package:artifact/admin_home_page.dart';
 import "package:artifact/main.dart";
+import 'package:artifact/home_page.dart';
 
 class ClothingPage extends StatefulWidget {
   const ClothingPage({super.key});
@@ -16,6 +17,9 @@ class ClothingPage extends StatefulWidget {
 }
 
 class _ClothingPageState extends State<ClothingPage> {
+  final List genders = ["Male", "Female", "Other"];
+  String? genderValue = "Male";
+
   final genderController = TextEditingController();
   final ageController = TextEditingController();
   final itemController = TextEditingController();
@@ -58,6 +62,21 @@ class _ClothingPageState extends State<ClothingPage> {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
+                    // child: DropdownButton(
+                    //   hint: Text("Please select a gender"),
+                    //   value: genderValue,
+                    //   onChanged: (val) {
+                    //     setState(() {
+                    //       genderValue = val as String;
+                    //     });
+                    //   },
+                    //   items: genders.map((valueItem) {
+                    //     return DropdownMenuItem(
+                    //       value: valueItem,
+                    //       child: Text(valueItem),
+                    //     );
+                    //   }).toList(),
+                    // ),
                     child: TextField(
                       controller: genderController,
                       textInputAction: TextInputAction.done,
