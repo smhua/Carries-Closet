@@ -1,11 +1,13 @@
 // import 'dart:html';
 import "package:artifact/main.dart";
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:artifact/Screens/open_page.dart';
 
 class ProfileForm extends StatefulWidget {
-  const ProfileForm({super.key});
-
+  const ProfileForm({super.key, required this.email, required this.password});
+  final String email;
+  final String password;
   @override
   ProfileFormState createState() {
     return ProfileFormState();
@@ -14,7 +16,6 @@ class ProfileForm extends StatefulWidget {
 
 class ProfileFormState extends State<ProfileForm> {
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,20 +78,21 @@ class ProfileFormState extends State<ProfileForm> {
                 backgroundColor: Color.fromARGB(255, 200, 200, 200),
                 textStyle: TextStyle(fontSize: 16),
               ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) {
-                    return const MainPage(isLogin: true);
-                  })));
-                }
-              },
+              onPressed: signUp,
               child: const Text('Save'),
             ),
           ],
         )),
       ),
     );
+  }
+  Future signUp() async {
+    if (_formKey.currentState!.validate()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: widget.email,
+        password: widget.password,
+      );
+    }
   }
 }
 

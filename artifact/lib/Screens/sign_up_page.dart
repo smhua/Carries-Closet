@@ -159,7 +159,7 @@ class _SignUpPageState extends State<SignUp_Page> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: ((context) {
-          return const ProfileForm();
+          return ProfileForm(email: emailController.text.trim(), password: passwordController.text.trim());
         }
       )));
     }
