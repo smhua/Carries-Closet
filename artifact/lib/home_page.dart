@@ -9,6 +9,8 @@ import 'package:artifact/Screens/open_page.dart';
 import 'package:artifact/Screens/hygiene_page.dart';
 import 'package:artifact/Screens/clothing_page.dart';
 
+import 'Screens/profile_page.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: ((context) {
-                        return HomePage();
+                        return ProfileForm();
                       })));
                     },
                     child: const Text('Profile')),

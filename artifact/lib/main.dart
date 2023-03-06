@@ -40,9 +40,9 @@ class MainPage extends StatelessWidget {
             if (snapshot.hasData) {
               return HomePage();
             } else if (isLogin) {
-              return HomePage();
+              return LoginPage();
             } else {
-              return HomePage();
+              return SignUp_Page();
             }
             // if (snapshot.hasData) {
             //   return HygienePage();
