@@ -149,6 +149,7 @@ class _SignUpPageState extends State<SignUp_Page> {
   void signUp() {
     final isValidForm = formKey.currentState!.validate(); 
     if (isValidForm) {
+      // TO DO:
       // MOVE THIS TO THE PROFILE PAGE SO WHEN YOU
       // SUBMIT INFORMATION THERE IT SENDS ALL AT ONCE
       // await FirebaseAuth.instance.createUserWithEmailAndPassword(
