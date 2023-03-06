@@ -2,8 +2,7 @@
 import "package:artifact/main.dart";
 import 'package:flutter/material.dart';
 import 'package:artifact/Screens/open_page.dart';
-
-import '../home_page.dart';
+import 'package:artifact/home_page.dart';
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
@@ -21,7 +20,6 @@ class ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
