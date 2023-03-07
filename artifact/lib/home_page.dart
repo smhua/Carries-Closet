@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import 'package:artifact/Screens/admin_request_page.dart';
-=======
 import 'package:artifact/Screens/profile_page.dart';
->>>>>>> origin
 import 'package:artifact/main.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';

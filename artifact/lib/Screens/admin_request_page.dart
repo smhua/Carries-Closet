@@ -47,7 +47,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
           stream: streamRequests,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              viewRequest();
+              viewUsers();
             } else if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else if (snapshot.connectionState == ConnectionState.active) {
@@ -87,7 +87,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     //             ]))));
   }
 
-  Future viewRequest() async {
+  Future viewUsers() async {
     print('view hygiene called');
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     var url = isIOS
@@ -98,8 +98,15 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     var parsed = json.decode(response.body);
-    print(parsed[1]);
-    print(parsed[1]['address']);
+    for (var i in parsed) {
+      print(i);
+    }
+    return parsed;
+    // print(parsed[1]);
+    // print(parsed[1]['address']);
+    // for (var doc in response.body) {
+    //   print(doc);
+    // }
     // print(parsed[0].)
     // for (var i in parsed) {
     //   print(i);
@@ -112,6 +119,53 @@ class RequestCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // User fetchedUser;
+    // await Firestore.instance
+    //     .collection('user')
+    //     .document(id)
+    //     .get()
+    //     .then((snapshot) {
+    //   final User user = User(snapshot);
+    //   fetchedUser = user;
+    // });
+
+    Future viewUsers() async {
+      bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+      var url = isIOS
+          ? Uri.parse('http://127.0.0.1:8080/users')
+          : Uri.parse('http://10.0.2.2:8080/users');
+
+      var response = await http.get(url);
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      var parsed = await json.decode(response.body);
+      return parsed;
+    }
+
+    // var parsed = viewUsers();
+    viewUsers().then((parsed) {
+      //here
+      // return Column(
+      //   for (var i in parsed) {
+      //     Card(
+      //       child: ListTile(
+      //           title: Text(parsed[i]['name']),
+      //           subtitle: Text(parsed[i]['email']),
+      //           trailing: Icon(Icons.more_vert)),
+      //     )
+      //   }
+      // );
+      // return Column(
+      //     Card(
+      //       child: ListTile(
+      //           title: Text(parsed[i]['name']),
+      //           subtitle: Text(parsed[i]['email']),
+      //           trailing: Icon(Icons.more_vert)),
+      //     )
+
+      // );
+    });
+
     return Center(
         child: Card(
       child: Column(
