@@ -38,8 +38,9 @@ def add_user():
     try:
         # should include username, password, email, and permissions
         if request.form.get('id') is None:
-            doc_id = users_ref.add(request.form)
-            return jsonify({"success": True, "id": doc_id[1].id}), 201
+            # doc_id = users_ref.add(request.form)
+            # return jsonify({"success": True, "id": doc_id[1].id}), 201
+            return jsonify({"success": False, "reason": "No UID provided."}), 400
         else:
             users_ref.document(request.form['id']).set(request.form)
             return jsonify({"success": True, "id": request.form['id']}), 201
@@ -49,6 +50,7 @@ def add_user():
 
 
 @app.route('/users', methods=['GET'])
+@app.route('/users/list', methods=['GET'])
 def get_user():
     """
         get_user() : Fetches documents from Firestore collection as JSON.
@@ -57,16 +59,17 @@ def get_user():
         # Check if ID was passed to URL query
         user_id = request.args.get('id')
         username = request.args.get('username')
-        if user_id is None:
+        if user_id is None and username is not None:
             for doc in users_ref.stream():
                 if doc.get('username') == username:
                     user_id = doc.id
-        if user_id:
+        if user_id is not None:
             user = users_ref.document(user_id).get()
             return jsonify(user.to_dict()), 200
         else:
-            # all_users = [doc.to_dict() for doc in users_ref.stream()]
-            return jsonify("No user found matching given parameters."), 404
+            all_users = [doc.to_dict() for doc in users_ref.stream()]
+            return jsonify(all_users), 200
+            # return jsonify("No user found matching given parameters."), 404
     except Exception as e:
         print(f"An Error Occurred: {e}")
         return error_500, 500
@@ -161,7 +164,19 @@ def list_clothing_requests():
     try:
         # Check for ID in request args
         document_id = request.args.get('id')
-        if document_id is None:
+        uid = request.args.get('uid')
+        if uid is not None:
+            all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
+            removed_documents = []
+            for i in range(len(all_requests)):
+                request_document = all_requests[i]
+                if request_document['type'].lower() != 'clothing' or request_document['uid'] != uid:
+                    removed_documents.append(request_document)
+            for document in removed_documents:
+                all_requests.remove(document)
+            return jsonify(all_requests), 200
+        elif document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
             all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             removed_documents = []
@@ -185,7 +200,19 @@ def list_hygiene_requests():
     try:
         # Check for ID in request args
         document_id = request.args.get('id')
-        if document_id is None:
+        uid = request.args.get('uid')
+        if uid is not None:
+            all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
+            removed_documents = []
+            for i in range(len(all_requests)):
+                request_document = all_requests[i]
+                if request_document['type'].lower() != 'hygiene' or request_document['uid'] != uid:
+                    removed_documents.append(request_document)
+            for document in removed_documents:
+                all_requests.remove(document)
+            return jsonify(all_requests), 200
+        elif document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
             all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             removed_documents = []
@@ -209,7 +236,19 @@ def list_all_requests():
     try:
         # Check for ID in request args
         document_id = request.args.get('id')
-        if document_id is None:
+        uid = request.args.get('uid')
+        if uid is not None:
+            all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
+            removed_documents = []
+            for i in range(len(all_requests)):
+                request_document = all_requests[i]
+                if request_document['uid'] != uid:
+                    removed_documents.append(request_document)
+            for document in removed_documents:
+                all_requests.remove(document)
+            return jsonify(all_requests), 200
+        elif document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
             all_requests = sorted(all_requests, key=lambda x: x['timestamp'])
             return jsonify(all_requests), 200
