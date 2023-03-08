@@ -76,23 +76,8 @@ class ProfileFormState extends State<ProfileForm> {
               ]),
               //Names
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
-                child: Row(
-                  children: [
-                    SizedBox(
-                        height: 50, width: 150, child: firstNameTextField()),
-                    SizedBox(
-                      width: 50,
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: 150,
-                      child: lastNameTextField(),
-                    )
-                  ],
-                ),
-              ),
-
+                  padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
+                  child: firstNameTextField()),
               SizedBox(height: height * 1.0 / 72.0),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 12.0),
@@ -198,28 +183,12 @@ Widget firstNameTextField() {
   return TextFormField(
     controller: ProfileFormState.firstNameController,
     decoration: const InputDecoration(
-      labelText: "First Name",
+      labelText: "Full Name",
       border: OutlineInputBorder(),
     ),
     validator: (value) {
       if (value == null || value.isEmpty) {
-        return "First Name is Required";
-      }
-      return null;
-    },
-  );
-}
-
-Widget lastNameTextField() {
-  return TextFormField(
-    controller: ProfileFormState.lastNameController,
-    decoration: const InputDecoration(
-      labelText: "Last Name",
-      border: OutlineInputBorder(),
-    ),
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return "Last Name is Required";
+        return "First and Last Name is Required";
       }
       return null;
     },
