@@ -78,29 +78,67 @@ class _RequestWidgetState extends State<RequestWidget> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: Text("Request #1"),
-                          subtitle: Text("${decode[index]['date']}"),
-                          trailing: Icon(Icons.more_vert),
-                        ),
+                            title:
+                                Text("Request #${decode[index]['requestno']}"),
+                            subtitle: Text("${decode[index]['date']}"),
+                            trailing: Row(
+                                mainAxisSize: MainAxisSize
+                                    .min, //hacky workaround but works
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        //action_on_tap here -> put whatever you want here, it will run when the notes icon is tapped- ideally some sort of popup showing additional notes/info
+                                        //can also just make this display any other additonal info, but tbh I don't think there's much else to display...
+                                        //...that shouldn't just be shown on the listing itself- address, size, item, gender, date are already shown
+                                        //...the only things not shown are like age, email, and additonal notes (so ig just display those? maybe include age in main list)
+                                        //TODO: See above comments^
+                                        if (decode[index]['notes'] == "N/A") {
+                                          print(
+                                              "No notes available for request #${decode[index]['requestno']}");
+                                        } else {
+                                          print(
+                                              "Displaying notes for request #${decode[index]['requestno']}"); //for example
+                                        }
+                                      },
+                                      child: Icon(Icons.notes)),
+                                  GestureDetector(
+                                      onTap: () {
+                                        //action_on_tap here -> put whatever you want here, it will run when the delete icon is tapped- ideally some sort of popup, then based on result, delete
+                                        print(
+                                            "${decode[index]['requestno']}"); //something something are u sure u want to delete request ? y/n
+                                        print("But the delete icon");
+                                      },
+                                      child: Icon(Icons.delete))
+                                ])),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Item: ${decode[index]['item']}"),
-                            Text("Size: ${decode[index]['size']}")
+                            Text(
+                                "Item: ${decode[index]['item']} ") //TODO: update this to handle multiple items per request, if we do that
                           ],
                         ),
-                        Text("Gender: ${decode[index]['gender']}"),
+                        Text(
+                            "Size: ${decode[index]['size']}"), //TODO: This whole way of displaying can use some work, but everything is displayable
+                        Text("Gender: ${decode[index]['gender']} "),
                         Text("Address: ${decode[index]['address']}"),
                         Row(
+                            //TODO: maybe make these buttons conditional- only display when a requested is 'received' status
+                            //TODO: Also add some kind of display of the request status somewhere
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               ElevatedButton(
-                                onPressed: null,
+                                onPressed: () {
+                                  updateRequest(
+                                      true, decode[index]['requestno']);
+                                },
                                 child: const Text('Complete'),
                               ),
                               const SizedBox(width: 8),
                               ElevatedButton(
-                                onPressed: null,
+                                onPressed: () {
+                                  updateRequest(
+                                      false, decode[index]['requestno']);
+                                },
                                 child: Text('Deny'),
                               ),
                               const SizedBox(width: 8),
@@ -154,5 +192,18 @@ class _RequestWidgetState extends State<RequestWidget> {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     return response.body;
+  }
+
+  void updateRequest(bool complete, String requestno_str) async {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    int requestno = int.parse(requestno_str);
+    String status = complete ? "shipped" : "rejected";
+    var url = isIOS
+        ? Uri.parse(
+            'http://127.0.0.1:8080/requests/update?requestno=$requestno')
+        : Uri.parse(
+            'http://10.0.2.2:8080/requests/update?requestno=$requestno');
+
+    var response = await http.patch(url, body: {'status': status});
   }
 }
