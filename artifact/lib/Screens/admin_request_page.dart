@@ -105,8 +105,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                                       onTap: () {
                                         //action_on_tap here -> put whatever you want here, it will run when the delete icon is tapped- ideally some sort of popup, then based on result, delete
                                         print(
-                                            "${decode[index]['requestno']}"); //something something are u sure u want to delete request ? y/n
-                                        print("But the delete icon");
+                                            "Popup saying 'Are you sure you want to delete request #${decode[index]['requestno']}?'"); //something something are u sure u want to delete request ? y/n
                                       },
                                       child: Icon(Icons.delete))
                                 ])),
