@@ -111,14 +111,20 @@ class _RequestWidgetState extends State<RequestWidget> {
                                       child: Icon(Icons.delete))
                                 ])),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          //some weird gap before this row here idk why
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                                "Item: ${decode[index]['item']} ") //TODO: update this to handle multiple items per request, if we do that
-                          ],
+                                "     Item: ${decode[index]['item']} ") //TODO: update this to handle multiple items per request, if we do that
+                          ], //spaces line it up with the title, def fix this to not be a hacky workaround
                         ),
-                        Text(
-                            "Size: ${decode[index]['size']}"), //TODO: This whole way of displaying can use some work, but everything is displayable
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                                "     Size: ${decode[index]['size']}"), //TODO: This whole way of displaying can use some work, but everything is displayable
+                          ], //same thing here
+                        ),
                         Text("Gender: ${decode[index]['gender']} "),
                         Text("Address: ${decode[index]['address']}"),
                         Row(
