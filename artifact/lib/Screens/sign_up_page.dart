@@ -171,7 +171,9 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-
+  // TO DO: 
+  // Check if email already exists in the database
+  // Will probably have to use a FutureBuilder
   void goToProfilePage() {
     final isValidForm = _formKey.currentState!.validate();
     print('going to profile page');

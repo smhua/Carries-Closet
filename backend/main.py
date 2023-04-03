@@ -63,8 +63,9 @@ def get_user():
             user = users_ref.document(user_id).get()
             return jsonify(user.to_dict()), 200
         else:
-            # all_users = [doc.to_dict() for doc in users_ref.stream()]
-            return jsonify("No user found matching given parameters."), 404
+            all_users = [doc.to_dict() for doc in users_ref.stream()]
+            return jsonify(all_users), 200
+            # return jsonify("No user found matching given parameters."), 404
     except Exception as e:
         print(f"An Error Occurred: {e}")
         return error_500, 500
