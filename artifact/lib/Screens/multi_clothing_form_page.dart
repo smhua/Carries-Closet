@@ -108,7 +108,9 @@ class _MultiClothingFormWidgetState extends State<MultiClothingFormWidget> {
   //Validate all forms and submit
   onSave() {
     bool allValid = true;
-
+    if (clothingForms.isEmpty) {
+      allValid = false;
+    }
     //If any form validation function returns false means all forms are not valid
     clothingForms
         .forEach((element) => allValid = (allValid && element.isValidated()));

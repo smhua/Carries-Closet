@@ -116,6 +116,9 @@ class _MultiHygieneFormWidgetState extends State<MultiHygieneFormWidget> {
   //Validate all forms and submit
   onSave() {
     bool allValid = true;
+    if (hygieneForms.isEmpty) {
+      allValid = false;
+    }
 
     //If any form validation function returns false means all forms are not valid
     hygieneForms
