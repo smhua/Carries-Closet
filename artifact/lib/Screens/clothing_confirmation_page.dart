@@ -38,6 +38,7 @@ class _ClothingConfirmationPageState extends State<ClothingConfirmationPage> {
           String userName = snapshot.data['name'];
           String userAddress = snapshot.data['address'];
           String userPhoneNum = snapshot.data['phone'];
+          String secondLine = snapshot.data['city'] + ', ' + snapshot.data['state'] + ', ' + snapshot.data['zip'];
           return Scaffold(
             bottomNavigationBar: Padding(
                 padding: EdgeInsets.only(
@@ -284,7 +285,7 @@ class _ClothingConfirmationPageState extends State<ClothingConfirmationPage> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 28.0),
-                      child: const Text(""),
+                      child: Text(secondLine),
                     ),
                   ),
                   SizedBox(
