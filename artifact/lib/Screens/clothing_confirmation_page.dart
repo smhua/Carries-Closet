@@ -32,321 +32,332 @@ class _ClothingConfirmationPageState extends State<ClothingConfirmationPage> {
     double height = MediaQuery.of(context).size.height;
     String uid = FirebaseAuth.instance.currentUser?.uid ?? "";
     return FutureBuilder(
-      future: fetchUserInformation(context, uid),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          String userName = snapshot.data['name'];
-          String userAddress = snapshot.data['address'];
-          String userPhoneNum = snapshot.data['phone'];
-          String secondLine = snapshot.data['city'] + ', ' + snapshot.data['state'] + ', ' + snapshot.data['zip'];
-          return Scaffold(
-            bottomNavigationBar: Padding(
-                padding: EdgeInsets.only(
-                    top: height * 1.0 / 32.0,
-                    left: width * 1.0 / 5.0,
-                    right: width * 1.0 / 5.0,
-                    bottom: height * 1.0 / 32.0),
-                child: SizedBox(
-                  child: CupertinoButton(
-                    color: const Color(0xFF7EA5F4),
-                    onPressed: () {
-                      submitDB();
-                      if (AppUser.isAdmin == PermissionStatus.admin) {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: ((context) {
-                          return const AdminHomePage();
-                        })));
-                      } else {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: ((context) {
-                          return const HomePage();
-                        })));
-                      }
-                    },
-                    child: const Text(
-                      "Submit Request",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )),
-            body: SingleChildScrollView(
-                physics: const ScrollPhysics(),
-                // appBar: AppBar(actions: [Actions(actions: <Widget>[]>, child: child)]),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  SizedBox(height: height * 1.0 / 18.0),
-                  Row(
-                    children: [
-                      Stack(alignment: Alignment.topLeft, children: [
-                        Align(
-                            alignment: Alignment.topLeft,
-                            child: IconButton(
-                                iconSize: width * 1.0 / 18.0,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.arrow_back))),
-                      ]),
-                      const Text(
-                        "   Review Order",
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        future: fetchUserInformation(context, uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String userName = snapshot.data['name'];
+            String userAddress = snapshot.data['address'];
+            String userPhoneNum = snapshot.data['phone'];
+            String secondLine = snapshot.data['city'] +
+                ', ' +
+                snapshot.data['state'] +
+                ', ' +
+                snapshot.data['zip'];
+            return Scaffold(
+                bottomNavigationBar: Padding(
+                    padding: EdgeInsets.only(
+                        top: height * 1.0 / 32.0,
+                        left: width * 1.0 / 5.0,
+                        right: width * 1.0 / 5.0,
+                        bottom: height * 1.0 / 32.0),
+                    child: SizedBox(
+                      child: CupertinoButton(
+                        color: const Color(0xFF7EA5F4),
+                        onPressed: () {
+                          submitDB();
+                          if (AppUser.isAdmin == PermissionStatus.admin) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: ((context) {
+                              return const AdminHomePage();
+                            })));
+                          } else {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: ((context) {
+                              return const HomePage();
+                            })));
+                          }
+                        },
+                        child: const Text(
+                          "Submit Request",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      SizedBox(
-                        width: width * 1.0 / 4.0,
+                    )),
+                body: SingleChildScrollView(
+                    physics: const ScrollPhysics(),
+                    // appBar: AppBar(actions: [Actions(actions: <Widget>[]>, child: child)]),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      SizedBox(height: height * 1.0 / 18.0),
+                      Row(
+                        children: [
+                          Stack(alignment: Alignment.topLeft, children: [
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                    iconSize: width * 1.0 / 18.0,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.arrow_back))),
+                          ]),
+                          const Text(
+                            "   Review Order",
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: width * 1.0 / 6.0,
+                          ),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero))),
+                              onPressed: () {
+                                if (AppUser.isAdmin == PermissionStatus.admin) {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: ((context) {
+                                    return const AdminHomePage();
+                                  })));
+                                } else {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: ((context) {
+                                    return const HomePage();
+                                  })));
+                                }
+                              },
+                              child: const Text("Cancel",
+                                  style: TextStyle(color: Colors.red)))
+                        ],
                       ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.zero))),
-                          onPressed: () {
-                            if (AppUser.isAdmin == PermissionStatus.admin) {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: ((context) {
-                                return const AdminHomePage();
-                              })));
-                            } else {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: ((context) {
-                                return const HomePage();
-                              })));
-                            }
-                          },
-                          child: const Text("Cancel",
-                              style: TextStyle(color: Colors.red)))
-                    ],
-                  ),
-                  SizedBox(height: height * 1.0 / 18.0),
-                  Row(
-                    children: [
-                      SizedBox(width: width * 1.0 / 22.0),
-                      const Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Color(0xFF808080),
-                        size: 30,
+                      SizedBox(height: height * 1.0 / 18.0),
+                      Row(
+                        children: [
+                          SizedBox(width: width * 1.0 / 22.0),
+                          const Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Color(0xFF808080),
+                            size: 30,
+                          ),
+                          const Text(
+                            "Items",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Color(0xFF808080)),
+                          ),
+                        ],
                       ),
-                      const Text(
-                        "Items",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color(0xFF808080)),
-                      ),
-                    ],
-                  ),
-                  Flexible(
-                    child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: widget.items.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: width * 1.0 / 12.0),
-                            child: Card(
-                                elevation: 0,
-                                color: const Color(0xFFF9F9F9),
-                                shape: const RoundedRectangleBorder(
-                                    side: BorderSide(color: Color(0xFFD9D9D9)),
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        bottomLeft: Radius.circular(16),
-                                        topRight: Radius.circular(16),
-                                        bottomRight: Radius.circular(16))),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: height * 1.0 / 55.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                      Flexible(
+                        child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: widget.items.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: width * 1.0 / 12.0),
+                                child: Card(
+                                    elevation: 0,
+                                    color: const Color(0xFFF9F9F9),
+                                    shape: const RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFD9D9D9)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(16),
+                                            bottomLeft: Radius.circular(16),
+                                            topRight: Radius.circular(16),
+                                            bottomRight: Radius.circular(16))),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: height * 1.0 / 55.0),
+                                      child: Column(
                                         children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
-                                              Text(
-                                                'Item # $index',
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0x00000000),
-                                                ),
-                                                textAlign: TextAlign.left,
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Item # $index',
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color(0x00000000),
+                                                    ),
+                                                    textAlign: TextAlign.left,
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  SizedBox(
+                                                      width:
+                                                          width * 11.0 / 42.0)
+                                                ],
                                               )
                                             ],
                                           ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              SizedBox(width: width * 11.0 / 42.0)
-                                            ],
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: width * 1.0 / 12.0,
+                                                vertical: height * 1.0 / 55.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Gender: ${widget.genders[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Item: ${widget.items[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Size: ${widget.sizes[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Emergency?: ${widget.emergencies[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Age: ${widget.ages[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Other Notes: ${widget.notes[index]}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: width * 1.0 / 12.0,
-                                            vertical: height * 1.0 / 55.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Gender: ${widget.genders[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'Item: ${widget.items[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'Size: ${widget.sizes[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'Emergency?: ${widget.emergencies[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'Age: ${widget.ages[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'Other Notes: ${widget.notes[index]}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: height * 1.0 / 24.0,
-                  ),
-                  Container(
-                    height: 1.0,
-                    width: width * 1.0,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: height * 1.0 / 32.0),
-                  Row(
-                    children: [
-                      SizedBox(width: width * 1.0 / 22.0),
-                      const Icon(
-                        Icons.location_pin,
-                        size: 30,
-                        color: Color(0xFF808080),
+                                    )),
+                              );
+                            }),
                       ),
-                      const Text(
-                        "Address",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Color(0xFF808080)),
+                      SizedBox(
+                        height: height * 1.0 / 24.0,
                       ),
-                      SizedBox(width: width * 1.0 / 1.75),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: height * 1.0 / 40.0,
-                          horizontal: width * 1.0 / 28.0),
-                      child: Text(userAddress),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 28.0),
-                      child: Text(secondLine),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 1.0 / 32.0,
-                  ),
-                  Container(
-                    height: 1.0,
-                    width: width * 1.0,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: height * 1.0 / 32.0),
-                  Row(
-                    children: [
-                      SizedBox(width: width * 1.0 / 22.0),
-                      const Icon(
-                        Icons.person_outline,
-                        color: Color(0xFF808080),
-                        size: 30,
+                      Container(
+                        height: 1.0,
+                        width: width * 1.0,
+                        color: Colors.grey,
                       ),
-                      const Text(
-                        "Contact Information",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Color(0xFF808080)),
+                      SizedBox(height: height * 1.0 / 32.0),
+                      Row(
+                        children: [
+                          SizedBox(width: width * 1.0 / 22.0),
+                          const Icon(
+                            Icons.location_pin,
+                            size: 30,
+                            color: Color(0xFF808080),
+                          ),
+                          const Text(
+                            "Address",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color(0xFF808080)),
+                          ),
+                          SizedBox(width: width * 1.0 / 1.75),
+                        ],
                       ),
-                      SizedBox(width: width * 1.0 / 2.75),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: height * 1.0 / 40.0,
-                          horizontal: width * 1.0 / 28.0),
-                      child: Text(userName),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width * 1.0 / 28.0),
-                      child: Text(userPhoneNum),
-                    ),
-                  ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: height * 1.0 / 40.0,
+                              horizontal: width * 1.0 / 28.0),
+                          child: Text(userAddress),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width * 1.0 / 28.0),
+                          child: Text(secondLine),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 1.0 / 32.0,
+                      ),
+                      Container(
+                        height: 1.0,
+                        width: width * 1.0,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: height * 1.0 / 32.0),
+                      Row(
+                        children: [
+                          SizedBox(width: width * 1.0 / 22.0),
+                          const Icon(
+                            Icons.person_outline,
+                            color: Color(0xFF808080),
+                            size: 30,
+                          ),
+                          const Text(
+                            "Contact Information",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color(0xFF808080)),
+                          ),
+                          SizedBox(width: width * 1.0 / 2.75),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: height * 1.0 / 40.0,
+                              horizontal: width * 1.0 / 28.0),
+                          child: Text(userName),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width * 1.0 / 28.0),
+                          child: Text(userPhoneNum),
+                        ),
+                      ),
 
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(vertical: height * 1.0 / 40.0),
-                  //   child: Text("Number of User"),
-                  // )
-          ])));
-        } else {
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(vertical: height * 1.0 / 40.0),
+                      //   child: Text("Number of User"),
+                      // )
+                    ])));
+          } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
               child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      }
-    );
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 
   Future submitDB() async {
@@ -385,6 +396,7 @@ class _ClothingConfirmationPageState extends State<ClothingConfirmationPage> {
       });
     }
   }
+
   Future fetchUserInformation(BuildContext context, String uid) async {
     debugPrint('getting user information');
     var url = Uri.parse('http://35.211.220.99/users?id=$uid&requester=$uid');
