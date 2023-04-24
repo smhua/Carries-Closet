@@ -151,40 +151,23 @@ class _HygieneConfirmationPageState extends State<HygieneConfirmationPage> {
                                     horizontal: width * 1.0 / 12.0),
                                 child: Card(
                                     elevation: 0,
-                                    color: const Color(0xFFF9F9F9),
-                                    shape: const RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Color(0xFFD9D9D9)),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(16),
-                                            bottomLeft: Radius.circular(16),
-                                            topRight: Radius.circular(16),
-                                            bottomRight: Radius.circular(16))),
+                                    color: const Color(0xFFF4F4F4),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: height * 1.0 / 55.0),
+                                      padding: EdgeInsets.only(
+                                          left: width * 1.0 / 35.0,
+                                          top: height * 1.0 / 75.0,
+                                          bottom: height * 1.0 / 75.0),
                                       child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Item # $index',
-                                                    style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0x00000000),
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  )
-                                                ],
-                                              ),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
@@ -205,45 +188,56 @@ class _HygieneConfirmationPageState extends State<HygieneConfirmationPage> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Gender: ${widget.genders[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
+                                                    'Item: ${widget.items[index]}',
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xFF2E2E2E))),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top:
+                                                          height * 1.0 / 130.0),
+                                                  child: Text(
+                                                      'Gender: ${widget.genders[index]}',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF2E2E2E),
+                                                          fontSize: 14)),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Item: ${widget.items[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top:
+                                                          height * 1.0 / 130.0),
+                                                  child: Text(
+                                                      'Age: ${widget.ages[index]}',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF2E2E2E),
+                                                          fontSize: 14)),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Size: ${widget.sizes[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top:
+                                                          height * 1.0 / 130.0),
+                                                  child: Text(
+                                                      'Size: ${widget.sizes[index]}',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF2E2E2E),
+                                                          fontSize: 14)),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Emergency?: ${widget.emergencies[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Age: ${widget.ages[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Other Notes: ${widget.notes[index]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top:
+                                                          height * 1.0 / 130.0),
+                                                  child: Text(
+                                                      'Other Notes: ${widget.notes[index]}',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF2E2E2E),
+                                                          fontSize: 14)),
                                                 ),
                                                 const SizedBox(height: 8),
                                               ],
