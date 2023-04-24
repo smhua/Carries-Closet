@@ -80,6 +80,15 @@ class _RequestWidgetState extends State<RequestWidget> {
             List<Widget> children;
             if (snapshot.hasData) {
               List<dynamic> decode = json.decode(snapshot.data.toString());
+              List<dynamic> remove = [];
+              for (int i = 0; i < decode.length; i++) {
+                if (decode[i]['status'] != "received") {
+                  remove.add(decode[i]);
+                }
+              }
+              for (int j = 0; j < remove.length; j++) {
+                decode.remove(remove[j]);
+              }
               return ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -260,7 +269,6 @@ class _RequestWidgetState extends State<RequestWidget> {
     debugPrint('parse requests called');
     var uid = FirebaseAuth.instance.currentUser!.uid;
     var url = Uri.parse('http://35.211.220.99/requests/list?requester=$uid');
-
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
