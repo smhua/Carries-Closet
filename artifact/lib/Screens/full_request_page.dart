@@ -393,7 +393,7 @@ class _FullRequestPageState extends State<FullRequestPage> {
     final request = await getRequest(requestno);
     var uid_requester = FirebaseAuth.instance.currentUser!.uid;
     var decode = json.decode(request.toString());
-    String uid = decode['uid'];
+    String uid = decode['id'];
     var url = Uri.parse(
         'http://35.211.220.99/users?id=$uid&requester=$uid_requester');
 
