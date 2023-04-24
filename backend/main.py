@@ -243,6 +243,7 @@ def list_all_requests():
                     break
         if document_id is None:
             all_requests = [doc.to_dict() for doc in requests_ref.stream()]
+            all_requests = sorted(all_requests, key=lambda x: x['requestno'])
             return jsonify(all_requests), 200
         else:
             return jsonify(requests_ref.document(document_id).get().to_dict()), 200
