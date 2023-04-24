@@ -5,6 +5,26 @@ through the ability to submit requests, save contact information, view donation 
 
 # Release Notes
 
+## Version 0.5.0
+
+### Features
+
+- Multi-items in one request: Can add multiple items in a single request, which will submit as separate requests in the database
+- View current information through Edit Profile: Edit Profile information now populates with currently logged in user's information 
+- Request confirmation page now properly loads in user's contact information and the delivery address
+
+### Bug Fixes
+
+- Fixed overflow issues on confirmation pages on android
+- System now checks whether a user is an admin or not to redirect the user to the correct page. This fixed issues of users being redirected to admin pages when they were not admins
+- View orders as admin now only see "Processed" requests. Completed and denied requests will not appear anymore 
+- View users as admin will display the users' names and not their IDs from the database
+
+### Known Issues
+
+- Edit profile will load in previous user's logged in information and changing it will edit the past user's information. Happens when you log in as a user, then logout and sign up a new user.
+
+
 ## Version 0.4.0
 
 ### Features
