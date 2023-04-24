@@ -84,7 +84,7 @@ class _ViewUsersState extends State<ViewUsers> {
                   return Card(
                       elevation: 0,
                       child: ListTile(
-                          title: Text(decode[index]['id']),
+                          title: Text(decode[index]['name']),
                           subtitle: Text(decode[index]['email']),
                           visualDensity: const VisualDensity(
                               vertical: 1.0, horizontal: 0.25),
