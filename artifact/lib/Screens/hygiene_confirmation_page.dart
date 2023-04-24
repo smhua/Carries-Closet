@@ -393,8 +393,6 @@ class _HygieneConfirmationPageState extends State<HygieneConfirmationPage> {
   }
 
   Future submitDB() async {
-    //print('submit clothing called');
-    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     var uid = FirebaseAuth.instance.currentUser!.uid;
     var url = Uri.parse(
         'http://35.211.220.99/requests/clothing/create?requester=$uid');
